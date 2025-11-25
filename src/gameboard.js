@@ -45,4 +45,22 @@ export class Gameboard {
             this.grid[x][y] = 'miss';
         }
     }
+
+    allShipsSunk(){
+        const ships = new Set();
+
+        for (let row of this.grid) {
+            for (let cell of row) {
+                if (cell !== 0 && cell !== "hit" && cell !== "miss") {
+                    ships.add(cell);
+                }
+            }
+        }
+    
+        for (let ship of ships) {
+            if (!ship.isSunk()) return false;
+        }
+    
+        return true;
+    }
 }

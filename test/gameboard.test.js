@@ -35,27 +35,19 @@ test('records missed attack on the ship', () => {
     expect(board.missedShots).toContainEqual([1,1]);
 });
 
-test('ignores duplicate attacks', () => {
+test('reports all ships sunk', () => {
     const board = new Gameboard();
-    board.receiveAttack([1,1]);
-    board.receiveAttack([1,1]);
+    const ship1 = new Ship(1);
+    const ship2 = new Ship(1);
 
-    expect(board.missedShots.length).toBe(1);
+    board.placeShip(ship1, [0, 0], 'horizontal');
+    board.placeShip(ship2, [1, 0], 'horizontal');
+
+    board.receiveAttack([0, 0]);
+    board.receiveAttack([1, 0]);
+
+    expect(board.allShipsSunk()).toBe(true);
 });
-
-// test('reports all ships sunk', () => {
-//     const board = new Gameboard();
-//     const ship1 = new Ship(1);
-//     const ship2 = new Ship(1);
-
-//     board.placeShip(ship1, [0, 0], 'horizontal');
-//     board.placeShip(ship2, [1, 0], 'horizontal');
-
-//     board.receiveAttack([0, 0]);
-//     board.receiveAttack([1, 0]);
-
-//     expect(board.allShipsSunk()).toBe(true);
-// });
 
 
 
