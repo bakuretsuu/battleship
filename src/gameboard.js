@@ -7,5 +7,42 @@ export class Gameboard {
                 this.grid[i][j] = 0;
             }
         }
+        this.missedShots = [];
+    }
+
+    placeShip(ship, coordinates, orientation){
+        const shipLength = ship.length;
+        const [x, y] = coordinates;
+        for (let i = 0; i < shipLength; i++) {
+            if (orientation === 'horizontal') {
+                if (this.grid[x][y+i] !== 0) return false;
+            } else if (orientation === 'vertical') {
+                if (this.grid[x+i][y] !== 0) return false;
+            }
+        }
+        
+        for(let i = 0; i < shipLength; i++){
+            if(orientation === 'horizontal'){
+                this.grid[x][y+i] = ship;
+            } else if (orientation === 'vertical'){
+                this.grid[x+i][y] = ship;
+            }
+        }
+        return true;
+    }
+
+    receiveAttack(coordinates){
+        const [x, y] = coordinates;
+        const cell = this.grid[x][y];
+
+        if (cell === 'miss' || cell === 'hit') return;
+    
+        if (cell !== 0) {
+            cell.hit();   
+            this.grid[x][y] = 'hit';       
+        } else {
+            this.missedShots.push([x,y]);
+            this.grid[x][y] = 'miss';
+        }
     }
 }
