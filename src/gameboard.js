@@ -1,3 +1,4 @@
+//gameboard.js
 export class Gameboard {
     constructor(){
         this.grid = [];

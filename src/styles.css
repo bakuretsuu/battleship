@@ -1,5 +1,166 @@
-/* styles.css */
+/* styles.css - Battleship
+   - Works with your .board containers and .cell elements
+   - Cells expect classes: .ship, .hit, .miss
+*/
+
+/* Page layout */
+:root{
+  --cell-size: 34px;
+  --cell-gap: 6px;
+  --board-gap: 28px;
+  --board-bg: #f5f7fa;
+  --cell-bg: #e9eef6;
+  --cell-border: #c7d2e6;
+  --ship-color: #7ea0d9;
+  --hit-color: #e15b5b;
+  --miss-color: #dbe9ff;
+  --accent: #2b6cb0;
+  --text: #1f2937;
+  --muted: #6b7280;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+
+/* Basic page */
+html, body {
+  height: 100%;
+  margin: 0;
+  background: linear-gradient(180deg, #fbfdff 0%, #f2f6fb 100%);
+  color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
 body {
-    background-color: rebeccapurple;
-  }
-  
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 18px;
+  padding: 28px;
+  box-sizing: border-box;
+}
+
+/* Headline */
+h1 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+  color: var(--accent);
+  letter-spacing: 0.2px;
+}
+
+/* Boards wrapper (optional if you want them side-by-side) */
+.boards {
+  display: flex;
+  gap: var(--board-gap);
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: flex-start;
+}
+
+/* Each board container */
+.board {
+  display: grid;
+  grid-template-columns: repeat(10, var(--cell-size));
+  grid-template-rows: repeat(10, var(--cell-size));
+  gap: var(--cell-gap);
+  padding: 12px;
+  background: var(--board-bg);
+  border-radius: 10px;
+  box-shadow: 0 6px 18px rgba(26, 54, 92, 0.06);
+  border: 1px solid rgba(43,76,176,0.06);
+}
+
+/* Optional label above a board */
+.board-label {
+  font-size: 13px;
+  color: var(--muted);
+  margin-bottom: 6px;
+  text-align: center;
+}
+
+/* Cells */
+.cell {
+  width: var(--cell-size);
+  height: var(--cell-size);
+  box-sizing: border-box;
+  background: var(--cell-bg);
+  border: 1px solid var(--cell-border);
+  border-radius: 6px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  transition: transform 0.08s ease, box-shadow 0.08s ease;
+  user-select: none;
+  font-size: 12px;
+  color: transparent; /* show no text by default */
+}
+
+/* Hover for clickable cells (pass a clickHandler to createBoard) */
+.cell.clickable:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(43,76,176,0.08);
+  cursor: pointer;
+}
+
+/* Visual states */
+.cell.ship {
+  background: var(--ship-color);
+  color: rgba(0,0,0,0.6);
+}
+
+.cell.hit {
+  background: var(--hit-color);
+  border-color: rgba(200, 80, 80, 0.9);
+  color: #fff;
+}
+
+.cell.miss {
+  background: var(--miss-color);
+  border-color: rgba(139, 168, 219, 0.9);
+  color: rgba(0,0,0,0.45);
+}
+
+/* Prevent clicking if already attacked */
+.cell[data-attacked="true"] {
+  pointer-events: none;
+  opacity: 0.9;
+}
+
+/* Small helper styles (status bar / instructions) */
+.controls {
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:center;
+  margin-top: 6px;
+  flex-wrap:wrap;
+}
+
+.btn {
+  background: var(--accent);
+  color: #fff;
+  padding: 8px 12px;
+  border-radius: 8px;
+  border: none;
+  font-size: 13px;
+  cursor: pointer;
+  box-shadow: 0 6px 12px rgba(43,76,176,0.08);
+}
+
+.status {
+  font-size: 13px;
+  color: var(--muted);
+}
+
+/* Responsive: shrink boards on small screens */
+@media (max-width: 640px) {
+  :root { --cell-size: 26px; --cell-gap:4px; }
+  .boards { gap: 16px; }
+}
+
+/* Accessibility: focus state for keyboard users */
+.cell:focus {
+  outline: 3px solid rgba(43,76,176,0.18);
+  outline-offset: 2px;
+  transform: translateY(-1px);
+}

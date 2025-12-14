@@ -1,3 +1,4 @@
+//game.js
 import { Gameboard } from "../src/gameboard.js";
 import { Ship } from "../src/ship.js";
 import { Player } from "../src/player.js";
@@ -17,27 +18,33 @@ export class Game {
         this.opponent = temp;
     }
 
-    attack(coordinates){
-        this.opponent.gameboard.receiveAttack(coordinates);
-
-        if (this.opponent.gameboard.allShipsSunk()) {
-            return `${this.currentPlayer.type} wins`;
+    attackPlayer(coordinates) {
+        this.player2.gameboard.receiveAttack(coordinates);
+    
+        if (this.player2.gameboard.allShipsSunk()) {
+            return "human wins";
         }
-
-        this.switchTurns();
-        return 'continue';
+    
+        return "continue";
     }
-
-    computerAttack(){
-        let x, y;
-        let key;
+    
+    attackComputer() {
+        let x, y, key;
         do {
-            x = Math.floor(Math.random()*10);
-            y = Math.floor(Math.random()*10);
+            x = Math.floor(Math.random() * 10);
+            y = Math.floor(Math.random() * 10);
             key = `${x},${y}`;
-        } while(this.previousComputerMoves.has(key));
-
+        } while (this.previousComputerMoves.has(key));
+    
         this.previousComputerMoves.add(key);
-        return this.attack([x,y]);
+    
+        this.player1.gameboard.receiveAttack([x, y]);
+    
+        if (this.player1.gameboard.allShipsSunk()) {
+            return "computer wins";
+        }
+    
+        return "continue";
     }
+    
 }
